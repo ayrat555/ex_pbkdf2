@@ -1,18 +1,9 @@
-defmodule ExPbkdf2 do
-  @moduledoc """
-  Documentation for `ExPbkdf2`.
-  """
+defmodule ExPBKDF2 do
+  use Rustler, otp_app: :ex_pbkdf2, crate: :ex_pbkdf2
 
-  @doc """
-  Hello world.
+  def generate_salt(), do: :erlang.nif_error(:nif_not_loaded)
 
-  ## Examples
+  def calculate_pbkdf2(password, salt, alg, iterations), do: :erlang.nif_error(:nif_not_loaded)
 
-      iex> ExPbkdf2.hello()
-      :world
-
-  """
-  def hello do
-    :world
-  end
+  def verify(hash, password, salt, alg, interations), do: :erlang.nif_error(:nif_not_loaded)
 end

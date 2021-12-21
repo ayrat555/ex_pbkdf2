@@ -1,16 +1,14 @@
-use pbkdf2::{
-    password_hash::{PasswordHash, PasswordHasher, PasswordVerifier, Salt, SaltString},
-    Pbkdf2,
-};
-
+use core::convert::TryInto;
+use pbkdf2::password_hash::Output;
+use pbkdf2::password_hash::PasswordHash;
+use pbkdf2::password_hash::PasswordHasher;
+use pbkdf2::password_hash::PasswordVerifier;
+use pbkdf2::password_hash::Salt;
+use pbkdf2::password_hash::SaltString;
 use pbkdf2::Algorithm;
 use pbkdf2::Params;
+use pbkdf2::Pbkdf2;
 use rand_core::OsRng;
-
-#[rustler::nif]
-fn add(a: i64, b: i64) -> i64 {
-    a + b
-}
 
 #[rustler::nif]
 fn generate_salt() -> String {
@@ -18,7 +16,7 @@ fn generate_salt() -> String {
 }
 
 #[rustler::nif]
-fn calc_pbkdf2(password: String, salt: String, alg: String, iterations: u32) -> String {
+fn calculate_pbkdf2(password: String, salt: String, alg: String, iterations: u32) -> String {
     let params = Params {
         rounds: iterations,
         output_length: 32,
@@ -39,11 +37,26 @@ fn calc_pbkdf2(password: String, salt: String, alg: String, iterations: u32) -> 
     result.hash.unwrap().to_string()
 }
 
-// #[rustler::nif]
-// fn verify(hash: String, password: String, salt: String, alg: String, iterations: u32) -> bool {
+#[rustler::nif]
+fn verify(hash: String, password: String, salt: String, alg: String, iterations: u32) -> bool {
+    let algorithm = parse_alg(alg);
+    let params = Params {
+        rounds: iterations,
+        output_length: 32,
+    };
+    let salt = Salt::new(&salt).unwrap();
+    let password_hash = PasswordHash {
+        algorithm: algorithm.ident(),
+        version: None,
+        hash: Some(Output::new(hash.as_bytes()).unwrap()),
+        salt: Some(salt),
+        params: params.try_into().unwrap(),
+    };
 
-//     PasswordHash {
-// }
+    Pbkdf2
+        .verify_password(password.as_bytes(), &password_hash)
+        .is_ok()
+}
 
 fn parse_alg(alg: String) -> Algorithm {
     match alg.as_str() {
@@ -53,4 +66,4 @@ fn parse_alg(alg: String) -> Algorithm {
     }
 }
 
-rustler::init!("Elixir.ExPBKDF2", [add, generate_salt, pbkdf2]);
+rustler::init!("Elixir.ExPBKDF2", [generate_salt, calculate_pbkdf2, verify]);
