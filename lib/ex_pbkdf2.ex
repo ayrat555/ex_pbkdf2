@@ -7,7 +7,7 @@ defmodule ExPBKDF2 do
     salt = Keyword.get(opts, :salt, generate_salt())
     alg = Keyword.get(opts, :alg, "sha512")
     iterations = Keyword.get(opts, :iterations, 4096)
-    length = Keyword.get(opts, :length, 32)
+    length = Keyword.get(opts, :length, 64)
     format = Keyword.get(opts, :format, false)
 
     Impl.calculate_pbkdf2(password, salt, alg, iterations, length, format)
