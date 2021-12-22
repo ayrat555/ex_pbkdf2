@@ -6,7 +6,7 @@ defmodule ExPbkdf2Test do
       expected_formatted_result =
         "$pbkdf2-sha256$i=4096,l=32$c2FsdA$xeR41ZKIyEGqUw22hFxMjZYok6ABzk4RpJY4c6qYE0o"
 
-      opts = [salt: "c2FsdA", alg: "sha256", iterations: 4096, length: 32]
+      opts = [salt: "c2FsdA", alg: "sha256", iterations: 4096, length: 32, format: true]
 
       assert expected_formatted_result == ExPBKDF2.pbkdf2("password", opts)
     end
@@ -21,7 +21,22 @@ defmodule ExPbkdf2Test do
       hash = "$pbkdf2-sha256$i=4096,l=32$c2FsdA$xeR41ZKIyEGqUw22hFxMjZYok6ABzk4RpJY4c6qYE0o"
       password = "password"
 
-      assert ExPBKDF2.verify(hash, password)
+      assert ExPBKDF2.verify(hash, password, formatted: true)
+    end
+
+    test "fails to verify" do
+      hash = "$pbkdf2-sha256$i=4096,l=32$c2FsdA$xeR41ZKIyEGqUw22hFxMjZYok6ABzk4RpJY4c6qYE0o"
+      password = "password1"
+
+      refute ExPBKDF2.verify(hash, password, formatted: true)
+    end
+
+    test "formats and verifies" do
+      opts = [salt: "c2FsdA", alg: "sha256", iterations: 4096, length: 32]
+      hash = "xeR41ZKIyEGqUw22hFxMjZYok6ABzk4RpJY4c6qYE0o"
+      password = "password"
+
+      assert ExPBKDF2.verify(hash, password, opts)
     end
   end
 end

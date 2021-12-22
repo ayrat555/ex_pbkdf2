@@ -20,6 +20,7 @@ fn calculate_pbkdf2(
     alg: String,
     iterations: u32,
     length: usize,
+    format: bool,
 ) -> String {
     let params = Params {
         rounds: iterations,
@@ -39,7 +40,11 @@ fn calculate_pbkdf2(
         )
         .unwrap();
 
-    result.to_string()
+    if format {
+        result.to_string()
+    } else {
+        result.hash.unwrap().to_string()
+    }
 }
 
 #[rustler::nif]

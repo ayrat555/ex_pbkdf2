@@ -3,7 +3,7 @@ defmodule ExPBKDF2.Impl do
 
   def generate_salt(), do: :erlang.nif_error(:nif_not_loaded)
 
-  def calculate_pbkdf2(_password, _salt, _alg, _iterations, _length),
+  def calculate_pbkdf2(_password, _salt, _alg, _iterations, _length, _format),
     do: :erlang.nif_error(:nif_not_loaded)
 
   def verify(_hash, _password),
