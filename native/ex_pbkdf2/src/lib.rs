@@ -1,5 +1,3 @@
-use core::convert::TryInto;
-use pbkdf2::password_hash::Output;
 use pbkdf2::password_hash::PasswordHash;
 use pbkdf2::password_hash::PasswordHasher;
 use pbkdf2::password_hash::PasswordVerifier;
@@ -27,6 +25,7 @@ fn calculate_pbkdf2(
         rounds: iterations,
         output_length: length,
     };
+
     let alg_var = parse_alg(alg);
     let salt = Salt::new(&salt).unwrap();
 
@@ -40,34 +39,15 @@ fn calculate_pbkdf2(
         )
         .unwrap();
 
-    result.hash.unwrap().to_string()
+    result.to_string()
 }
 
 #[rustler::nif]
-fn verify(
-    hash: String,
-    password: String,
-    salt: String,
-    alg: String,
-    iterations: u32,
-    length: usize,
-) -> bool {
-    let algorithm = parse_alg(alg);
-    let params = Params {
-        rounds: iterations,
-        output_length: length,
-    };
-    let salt = Salt::new(&salt).unwrap();
-    let password_hash = PasswordHash {
-        algorithm: algorithm.ident(),
-        version: None,
-        hash: Some(Output::new(hash.as_bytes()).unwrap()),
-        salt: Some(salt),
-        params: params.try_into().unwrap(),
-    };
+fn verify(hash: String, password: String) -> bool {
+    let parsed_hash = PasswordHash::new(&hash).unwrap();
 
     Pbkdf2
-        .verify_password(password.as_bytes(), &password_hash)
+        .verify_password(password.as_bytes(), &parsed_hash)
         .is_ok()
 }
 
@@ -79,4 +59,7 @@ fn parse_alg(alg: String) -> Algorithm {
     }
 }
 
-rustler::init!("Elixir.ExPBKDF2", [generate_salt, calculate_pbkdf2, verify]);
+rustler::init!(
+    "Elixir.ExPBKDF2.Impl",
+    [generate_salt, calculate_pbkdf2, verify]
+);
