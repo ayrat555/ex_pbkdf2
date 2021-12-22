@@ -21,9 +21,8 @@ defmodule ExPbkdf2.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:rustler,
-       git: "https://github.com/rusterlium/rustler", branch: "master", sparse: "rustler_mix"}
-      # {:dep_from_git, git: "https://github.com/elixir-lang/my_dep.git", tag: "0.1.0"}
+      {:rustler, "~> 0.22"},
+      {:benchee, "~> 1.0", only: :test}
     ]
   end
 end

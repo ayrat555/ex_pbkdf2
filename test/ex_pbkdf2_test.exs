@@ -40,6 +40,43 @@ defmodule ExPbkdf2Test do
     end
   end
 
+  @tag :perf
+  @tag timeout: 300_000
+  test "sequencial performance test" do
+    Benchee.run(
+      %{
+        "pbkdf2_seq" => fn ->
+          salt = ExPBKDF2.generate_salt()
+
+          opts = [salt: salt, alg: "sha512", iterations: 4096, length: 64, format: true]
+
+          ExPBKDF2.pbkdf2("password", opts)
+        end
+      },
+      time: 100,
+      memory_time: 100
+    )
+  end
+
+  @tag :perf
+  @tag timeout: 300_000
+  test "parallel performance test" do
+    Benchee.run(
+      %{
+        "pbkdf2_par" => fn ->
+          salt = ExPBKDF2.generate_salt()
+
+          opts = [salt: salt, alg: "sha512", iterations: 4096, length: 64, format: true]
+
+          ExPBKDF2.pbkdf2("password", opts)
+        end
+      },
+      time: 100,
+      memory_time: 100,
+      parallel: 4
+    )
+  end
+
   test "base pbkdf2_sha512 tests" do
     [
       {

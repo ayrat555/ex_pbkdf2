@@ -1,0 +1,24 @@
+Operating System: macOS
+CPU Information: Intel(R) Core(TM) i5-1038NG7 CPU @ 2.00GHz
+Number of Available Cores: 8
+Available memory: 16 GB
+Elixir 1.13.1
+Erlang 24.0.6
+
+Benchmark suite executing with the following configuration:
+warmup: 2 s
+time: 1.67 min
+memory time: 1.67 min
+parallel: 1
+inputs: none specified
+Estimated total run time: 3.37 min
+
+Benchmarking pbkdf2_seq...
+
+Name                 ips        average  deviation         median         99th %
+pbkdf2_seq        334.23        2.99 ms    ±12.15%        2.89 ms        4.38 ms
+
+Memory usage statistics:
+
+Name          Memory usage
+pbkdf2_seq           264 B
