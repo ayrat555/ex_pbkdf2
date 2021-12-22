@@ -3,7 +3,9 @@ defmodule ExPBKDF2 do
 
   def generate_salt(), do: :erlang.nif_error(:nif_not_loaded)
 
-  def calculate_pbkdf2(password, salt, alg, iterations), do: :erlang.nif_error(:nif_not_loaded)
+  def calculate_pbkdf2(_password, _salt, _alg, _iterations, _length),
+    do: :erlang.nif_error(:nif_not_loaded)
 
-  def verify(hash, password, salt, alg, interations), do: :erlang.nif_error(:nif_not_loaded)
+  def verify(_hash, _password, _salt, _alg, _iterations, _length),
+    do: :erlang.nif_error(:nif_not_loaded)
 end

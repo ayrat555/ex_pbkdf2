@@ -16,10 +16,16 @@ fn generate_salt() -> String {
 }
 
 #[rustler::nif]
-fn calculate_pbkdf2(password: String, salt: String, alg: String, iterations: u32) -> String {
+fn calculate_pbkdf2(
+    password: String,
+    salt: String,
+    alg: String,
+    iterations: u32,
+    length: usize,
+) -> String {
     let params = Params {
         rounds: iterations,
-        output_length: 32,
+        output_length: length,
     };
     let alg_var = parse_alg(alg);
     let salt = Salt::new(&salt).unwrap();
@@ -38,11 +44,18 @@ fn calculate_pbkdf2(password: String, salt: String, alg: String, iterations: u32
 }
 
 #[rustler::nif]
-fn verify(hash: String, password: String, salt: String, alg: String, iterations: u32) -> bool {
+fn verify(
+    hash: String,
+    password: String,
+    salt: String,
+    alg: String,
+    iterations: u32,
+    length: usize,
+) -> bool {
     let algorithm = parse_alg(alg);
     let params = Params {
         rounds: iterations,
-        output_length: 32,
+        output_length: length,
     };
     let salt = Salt::new(&salt).unwrap();
     let password_hash = PasswordHash {
