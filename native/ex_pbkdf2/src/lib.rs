@@ -1,3 +1,4 @@
+use pbkdf2::password_hash::Output;
 use pbkdf2::password_hash::PasswordHash;
 use pbkdf2::password_hash::PasswordHasher;
 use pbkdf2::password_hash::PasswordVerifier;
@@ -7,10 +8,27 @@ use pbkdf2::Algorithm;
 use pbkdf2::Params;
 use pbkdf2::Pbkdf2;
 use rand_core::OsRng;
+use rustler::types::binary::OwnedBinary;
 
 #[rustler::nif]
-fn generate_salt() -> String {
-    SaltString::generate(&mut OsRng).as_str().into()
+fn generate_salt(format: bool) -> OwnedBinary {
+    let result = SaltString::generate(&mut OsRng);
+
+    if format {
+        let mut erl_bin: OwnedBinary = OwnedBinary::new(22).unwrap();
+        erl_bin.as_mut_slice().copy_from_slice(&result.as_bytes());
+
+        erl_bin
+    } else {
+        let mut buffer = [0u8; 16];
+
+        result.b64_decode(&mut buffer).unwrap();
+
+        let mut erl_bin: OwnedBinary = OwnedBinary::new(16).unwrap();
+        erl_bin.as_mut_slice().copy_from_slice(&buffer);
+
+        erl_bin
+    }
 }
 
 #[rustler::nif]
@@ -21,7 +39,7 @@ fn calculate_pbkdf2(
     iterations: u32,
     length: usize,
     format: bool,
-) -> String {
+) -> OwnedBinary {
     let params = Params {
         rounds: iterations,
         output_length: length,
@@ -40,10 +58,19 @@ fn calculate_pbkdf2(
         )
         .unwrap();
 
+    let hash = result.hash.unwrap();
+
     if format {
-        result.to_string()
+        let str_hash = hash.to_string();
+        let mut erl_bin: OwnedBinary = OwnedBinary::new(str_hash.len()).unwrap();
+        erl_bin.as_mut_slice().copy_from_slice(&str_hash.as_bytes());
+
+        erl_bin
     } else {
-        result.hash.unwrap().to_string()
+        let mut erl_bin: OwnedBinary = OwnedBinary::new(length).unwrap();
+        erl_bin.as_mut_slice().copy_from_slice(&hash.as_bytes());
+
+        erl_bin
     }
 }
 

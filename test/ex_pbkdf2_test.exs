@@ -2,13 +2,21 @@ defmodule ExPbkdf2Test do
   use ExUnit.Case
 
   describe "pbkdf2/2" do
-    test "calculates pbkdf2" do
-      expected_formatted_result =
-        "$pbkdf2-sha256$i=4096,l=32$c2FsdA$xeR41ZKIyEGqUw22hFxMjZYok6ABzk4RpJY4c6qYE0o"
+    test "calculates pbkdf2 and format to b64" do
+      expected_formatted_result = "xeR41ZKIyEGqUw22hFxMjZYok6ABzk4RpJY4c6qYE0o"
 
-      opts = [salt: "c2FsdA", alg: "sha256", iterations: 4096, length: 32, format: true]
+      opts = %{salt: "c2FsdA", alg: "sha256", iterations: 4096, length: 32, format: true}
 
       assert expected_formatted_result == ExPBKDF2.pbkdf2("password", opts)
+    end
+
+    test "calculates pbkdf2 and returns raw binary" do
+      expected_formatted_result = "xeR41ZKIyEGqUw22hFxMjZYok6ABzk4RpJY4c6qYE0o"
+
+      opts = %{salt: "c2FsdA", alg: "sha256", iterations: 4096, length: 32, format: false}
+
+      assert expected_formatted_result ==
+               "password" |> ExPBKDF2.pbkdf2(opts) |> Base.encode64(padding: false)
     end
 
     test "generates salt if it's not provided" do
@@ -21,22 +29,36 @@ defmodule ExPbkdf2Test do
       hash = "$pbkdf2-sha256$i=4096,l=32$c2FsdA$xeR41ZKIyEGqUw22hFxMjZYok6ABzk4RpJY4c6qYE0o"
       password = "password"
 
-      assert ExPBKDF2.verify(hash, password, formatted: true)
+      assert ExPBKDF2.verify(hash, password, %{formatted: true})
     end
 
     test "fails to verify" do
       hash = "$pbkdf2-sha256$i=4096,l=32$c2FsdA$xeR41ZKIyEGqUw22hFxMjZYok6ABzk4RpJY4c6qYE0o"
       password = "password1"
 
-      refute ExPBKDF2.verify(hash, password, formatted: true)
+      refute ExPBKDF2.verify(hash, password, %{formatted: true})
     end
 
     test "formats and verifies" do
-      opts = [salt: "c2FsdA", alg: "sha256", iterations: 4096, length: 32]
+      opts = %{salt: "c2FsdA", alg: "sha256", iterations: 4096, length: 32}
       hash = "xeR41ZKIyEGqUw22hFxMjZYok6ABzk4RpJY4c6qYE0o"
       password = "password"
 
       assert ExPBKDF2.verify(hash, password, opts)
+    end
+  end
+
+  describe "generate_salt/1" do
+    test "returns raw salt if format if false" do
+      assert binary = ExPBKDF2.generate_salt(false)
+
+      assert :error = Base.decode64(binary)
+    end
+
+    test "returns b64 encoded salt if format is true" do
+      assert binary = ExPBKDF2.generate_salt(true)
+
+      assert {:ok, _val} = Base.decode64(binary, padding: false)
     end
   end
 
@@ -48,7 +70,7 @@ defmodule ExPbkdf2Test do
         "pbkdf2_seq" => fn ->
           salt = ExPBKDF2.generate_salt()
 
-          opts = [salt: salt, alg: "sha512", iterations: 4096, length: 64, format: true]
+          opts = %{salt: salt, alg: "sha512", iterations: 4096, length: 64, format: true}
 
           ExPBKDF2.pbkdf2("password", opts)
         end
@@ -196,7 +218,7 @@ defmodule ExPbkdf2Test do
 
   defp check_vectors(vectors, alg, length \\ 64) do
     for {password, salt, iterations, hash} <- vectors do
-      opts = [salt: salt, alg: alg, iterations: iterations, length: length]
+      opts = %{salt: salt, alg: alg, iterations: iterations, length: length, format: true}
 
       calc_hash = ExPBKDF2.pbkdf2(password, opts)
 
