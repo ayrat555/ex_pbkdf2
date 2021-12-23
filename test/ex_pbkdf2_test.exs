@@ -24,7 +24,7 @@ defmodule ExPbkdf2Test do
     end
   end
 
-  describe "verify/2" do
+  describe "verify/3" do
     test "verifies hash" do
       hash = "$pbkdf2-sha256$i=4096,l=32$c2FsdA$xeR41ZKIyEGqUw22hFxMjZYok6ABzk4RpJY4c6qYE0o"
       password = "password"
