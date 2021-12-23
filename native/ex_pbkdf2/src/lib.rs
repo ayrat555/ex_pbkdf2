@@ -1,4 +1,3 @@
-use pbkdf2::password_hash::Output;
 use pbkdf2::password_hash::PasswordHash;
 use pbkdf2::password_hash::PasswordHasher;
 use pbkdf2::password_hash::PasswordVerifier;

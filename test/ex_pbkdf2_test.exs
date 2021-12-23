@@ -68,7 +68,7 @@ defmodule ExPbkdf2Test do
     Benchee.run(
       %{
         "pbkdf2_seq" => fn ->
-          salt = ExPBKDF2.generate_salt()
+          salt = ExPBKDF2.generate_salt(true)
 
           opts = %{salt: salt, alg: "sha512", iterations: 4096, length: 64, format: true}
 
@@ -86,9 +86,9 @@ defmodule ExPbkdf2Test do
     Benchee.run(
       %{
         "pbkdf2_par" => fn ->
-          salt = ExPBKDF2.generate_salt()
+          salt = ExPBKDF2.generate_salt(true)
 
-          opts = [salt: salt, alg: "sha512", iterations: 4096, length: 64, format: true]
+          opts = %{salt: salt, alg: "sha512", iterations: 4096, length: 64, format: true}
 
           ExPBKDF2.pbkdf2("password", opts)
         end
