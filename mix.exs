@@ -1,13 +1,44 @@
 defmodule ExPbkdf2.MixProject do
   use Mix.Project
 
+  @source_url "https://github.com/ayrat555/ex_pbkdf2"
+
   def project do
     [
       app: :ex_pbkdf2,
       version: "0.1.0",
       elixir: "~> 1.13",
       start_permanent: Mix.env() == :prod,
-      deps: deps()
+      deps: deps(),
+      description: description(),
+      package: package()
+    ]
+  end
+
+  defp description do
+    """
+    Pbkdf2 for Elixir by a Rust-based NIF
+    """
+  end
+
+  defp package do
+    [
+      name: :ex_secp256k1,
+      maintainers: ["Ayrat Badykov"],
+      licenses: ["MIT"],
+      links: %{
+        "Changelog" => "#{@source_url}/blob/master/CHANGELOG.md",
+        "GitHub" => @source_url
+      },
+      files: [
+        "mix.exs",
+        "native/ex_pbkdf2/src",
+        "native/ex_pbkdf2/Cargo.toml",
+        "lib",
+        "LICENSE",
+        "README.md",
+        "CHANGELOG.md"
+      ]
     ]
   end
 
