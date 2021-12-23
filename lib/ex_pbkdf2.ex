@@ -1,10 +1,14 @@
 defmodule ExPBKDF2 do
+  @moduledoc false
+
   alias ExPBKDF2.Impl
 
+  @spec generate_salt(bool() | nil) :: binary() | String.t() | no_return()
   def generate_salt(format \\ false) do
     Impl.generate_salt(format)
   end
 
+  @spec pbkdf2(map(), map() | nil) :: binary() | String.t() | no_return()
   def pbkdf2(password, opts \\ %{}) do
     salt = Map.get(opts, :salt, generate_salt(true))
     alg = Map.get(opts, :alg, "sha512")
@@ -15,6 +19,7 @@ defmodule ExPBKDF2 do
     Impl.calculate_pbkdf2(password, salt, alg, iterations, length, format)
   end
 
+  @spec verify(String.t(), String.t(), map() | nil) :: bool() | no_return()
   def verify(hash, password, %{formatted: true}), do: Impl.verify(hash, password)
 
   def verify(hash, password, %{salt: salt, alg: alg, iterations: iterations, length: length}) do

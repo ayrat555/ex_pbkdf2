@@ -22,7 +22,9 @@ defmodule ExPbkdf2.MixProject do
   defp deps do
     [
       {:rustler, "~> 0.22"},
-      {:benchee, "~> 1.0", only: :test}
+      {:benchee, "~> 1.0", only: :test},
+      {:dialyxir, "~> 1.0", only: [:dev], runtime: false},
+      {:credo, "~> 1.6", only: [:dev, :test], runtime: false}
     ]
   end
 end
