@@ -9,7 +9,7 @@ The package can be installed by adding `ex_pbkdf2` to your list of dependencies 
 ```elixir
 def deps do
   [
-    {:ex_pbkdf2, "~> 0.1.0"}
+    {:ex_pbkdf2, "~> 0.1"}
   ]
 end
 ```
