@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.2.0
+
+* Use raw binary for salt
+
 ## 0.1.1
 
 * Bump rustler crate - [2cb33723](https://github.com/ayrat555/ex_pbkdf2/commit/2cb33723223822fc066da6a3ee7d136960cb6d41)
