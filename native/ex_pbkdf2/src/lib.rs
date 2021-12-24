@@ -1,12 +1,12 @@
 use pbkdf2::password_hash::PasswordHash;
 use pbkdf2::password_hash::PasswordHasher;
 use pbkdf2::password_hash::PasswordVerifier;
-use pbkdf2::password_hash::Salt;
 use pbkdf2::password_hash::SaltString;
 use pbkdf2::Algorithm;
 use pbkdf2::Params;
 use pbkdf2::Pbkdf2;
 use rand_core::OsRng;
+use rustler::types::binary::Binary;
 use rustler::types::binary::OwnedBinary;
 
 #[rustler::nif]
@@ -33,7 +33,7 @@ fn generate_salt(format: bool) -> OwnedBinary {
 #[rustler::nif]
 fn calculate_pbkdf2(
     password: String,
-    salt: String,
+    salt: Binary,
     alg: String,
     iterations: u32,
     length: usize,
@@ -45,7 +45,7 @@ fn calculate_pbkdf2(
     };
 
     let alg_var = parse_alg(alg);
-    let salt = Salt::new(&salt).unwrap();
+    let salt = SaltString::b64_encode(&salt.as_slice()).unwrap();
 
     let result = Pbkdf2
         .hash_password_customized(
@@ -53,7 +53,7 @@ fn calculate_pbkdf2(
             Some(alg_var.ident()),
             None,
             params,
-            salt,
+            salt.as_salt(),
         )
         .unwrap();
 

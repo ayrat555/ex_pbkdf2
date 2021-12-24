@@ -1,11 +1,11 @@
 defmodule ExPbkdf2Test do
-  use ExUnit.Case
+  use ExUnit.Case, async: true
 
   describe "pbkdf2/2" do
     test "calculates pbkdf2 and format to b64" do
       expected_formatted_result = "xeR41ZKIyEGqUw22hFxMjZYok6ABzk4RpJY4c6qYE0o"
 
-      opts = %{salt: "c2FsdA", alg: "sha256", iterations: 4096, length: 32, format: true}
+      opts = %{salt: "salt", alg: "sha256", iterations: 4096, length: 32, format: true}
 
       assert expected_formatted_result == ExPBKDF2.pbkdf2("password", opts)
     end
@@ -13,7 +13,7 @@ defmodule ExPbkdf2Test do
     test "calculates pbkdf2 and returns raw binary" do
       expected_formatted_result = "xeR41ZKIyEGqUw22hFxMjZYok6ABzk4RpJY4c6qYE0o"
 
-      opts = %{salt: "c2FsdA", alg: "sha256", iterations: 4096, length: 32, format: false}
+      opts = %{salt: "salt", alg: "sha256", iterations: 4096, length: 32, format: false}
 
       assert expected_formatted_result ==
                "password" |> ExPBKDF2.pbkdf2(opts) |> Base.encode64(padding: false)
@@ -40,7 +40,7 @@ defmodule ExPbkdf2Test do
     end
 
     test "formats and verifies" do
-      opts = %{salt: "c2FsdA", alg: "sha256", iterations: 4096, length: 32}
+      opts = %{salt: "salt", alg: "sha256", iterations: 4096, length: 32}
       hash = "xeR41ZKIyEGqUw22hFxMjZYok6ABzk4RpJY4c6qYE0o"
       password = "password"
 
@@ -103,13 +103,13 @@ defmodule ExPbkdf2Test do
     [
       {
         "passDATAb00AB7YxDTT",
-        Base.encode64("saltKEYbcTcXHCBxtjD", padding: false),
+        "saltKEYbcTcXHCBxtjD",
         100_000,
         "rM3Nh5iuXNhYBHOQFe8qEeMlkbe30W92gZswsNSdgOGr6myYIrgKH9/kIeJvVgPsqKR6ZMmgBPta+CKfdi/0Hw"
       },
       {
         "passDATAb00AB7YxDTTl",
-        Base.encode64("saltKEYbcTcXHCBxtjD2", padding: false),
+        "saltKEYbcTcXHCBxtjD2",
         100_000,
         "WUJWsL1NbJ8hqH97pXcqeRoQ5hEGlPRDZc2UZw5X8a7NeX7x0QAZOHGQRMfwGAJml4Reua2X2X3jarh4aqtQlg"
       }
@@ -121,34 +121,25 @@ defmodule ExPbkdf2Test do
     [
       {
         "password",
-        Base.encode64(
-          <<36, 196, 248, 159, 51, 166, 84, 170, 213, 250, 159, 211, 154, 83, 10, 193>>,
-          padding: false
-        ),
+        <<36, 196, 248, 159, 51, 166, 84, 170, 213, 250, 159, 211, 154, 83, 10, 193>>,
         19_000,
         "jKbZHoPwUWBT08pjb/CnUZmFcB9JW4dsOzVkfi9X6Pdn5NXWeY+mhL1Bm4V9rjYL5ZfA32uh7Gl2gt5YQa/JCA"
       },
       {
         "p@$$w0rd",
-        Base.encode64(<<252, 159, 83, 202, 89, 107, 141, 17, 66, 200, 121, 239, 29, 163, 20, 34>>,
-          padding: false
-        ),
+        <<252, 159, 83, 202, 89, 107, 141, 17, 66, 200, 121, 239, 29, 163, 20, 34>>,
         19_000,
         "AJ3Dr926ltK1sOZMZAAoT7EoR7R/Hp+G6Bt+4DFENiYayhVM/ZBPuqjFNhcE9NjTmceTmLnSqzfEQ8mafy49sw"
       },
       {
         "oh this is hard 2 guess",
-        Base.encode64(<<1, 96, 140, 17, 162, 84, 42, 165, 84, 42, 165, 244, 62, 71, 136, 177>>,
-          padding: false
-        ),
+        <<1, 96, 140, 17, 162, 84, 42, 165, 84, 42, 165, 244, 62, 71, 136, 177>>,
         19_000,
         "F0xkzJUOKaH8pwAfEwLeZK2/li6CF3iEcpfoJ1XoExQUTStXCNVxE1sd1k0aeQlSFK6JnxJOjM18kZIdzNYkcQ"
       },
       {
         "even more difficult",
-        Base.encode64(<<215, 186, 87, 42, 133, 112, 14, 1, 160, 52, 38, 100, 44, 229, 92, 203>>,
-          padding: false
-        ),
+        <<215, 186, 87, 42, 133, 112, 14, 1, 160, 52, 38, 100, 44, 229, 92, 203>>,
         19_000,
         "TEv9woSaVTsYHLxXnFbWO1oKrUGfUAljkLnqj8W/80BGaFbhccG8B9fZc05RoUo7JQvfcwsNee19g8GD5UxwHA"
       }
@@ -160,25 +151,19 @@ defmodule ExPbkdf2Test do
     [
       {
         "funferal",
-        Base.encode64(<<192, 39, 248, 127, 11, 37, 71, 252, 74, 75, 244, 70, 129, 27, 51, 71>>,
-          padding: false
-        ),
+        <<192, 39, 248, 127, 11, 37, 71, 252, 74, 75, 244, 70, 129, 27, 51, 71>>,
         60_000,
         "QJHazw8zTaY0HvGQF1Slb07Ug9DFFLjoq63aORwhA+o/OM+e9UpxldolWyCNLv3duHuxpEWoZtGHfm3VTFCqpg"
       },
       {
         "he's N0t the Me551ah!",
-        Base.encode64(<<60, 130, 11, 97, 11, 23, 236, 250, 227, 233, 56, 1, 86, 131, 41, 163>>,
-          padding: false
-        ),
+        <<60, 130, 11, 97, 11, 23, 236, 250, 227, 233, 56, 1, 86, 131, 41, 163>>,
         60_000,
         "tsPUY4uMzTbJuv81xxZzsUGvT1LGjk9EfJuAYoZH9KaCSGH90J8BuQwY4Jb0JZbwOI00BSR4hDBVmn3Z8V+Ywg"
       },
       {
         "ἓν οἶδα ὅτι οὐδὲν οἶδα",
-        Base.encode64(<<29, 10, 228, 45, 215, 110, 213, 118, 168, 14, 197, 198, 67, 72, 34, 221>>,
-          padding: false
-        ),
+        <<29, 10, 228, 45, 215, 110, 213, 118, 168, 14, 197, 198, 67, 72, 34, 221>>,
         60_000,
         "UVkPApVkIkQN0FTQwaKffYoZ5Mbh0712p1GWs9H1Z+fBNQScUWCj/GAUtZDYMkIN3kIi9ORvut+SQ7aBipcpDQ"
       }
@@ -190,25 +175,19 @@ defmodule ExPbkdf2Test do
     [
       {
         "funferal",
-        Base.encode64(<<192, 39, 248, 127, 11, 37, 71, 252, 74, 75, 244, 70, 129, 27, 51, 71>>,
-          padding: false
-        ),
+        <<192, 39, 248, 127, 11, 37, 71, 252, 74, 75, 244, 70, 129, 27, 51, 71>>,
         60_000,
         "p1XmqbB8u/EfvftMDoLyL4ZcVKT6Nz+Y4E/8xuoRePA"
       },
       {
         "he's N0t the Me551ah!",
-        Base.encode64(<<60, 130, 11, 97, 11, 23, 236, 250, 227, 233, 56, 1, 86, 131, 41, 163>>,
-          padding: false
-        ),
+        <<60, 130, 11, 97, 11, 23, 236, 250, 227, 233, 56, 1, 86, 131, 41, 163>>,
         80_000,
         "ErhanHiaHKh63nxft7nMS7rRpglbrZdQ6tEAhyrd+tQ"
       },
       {
         "ἓν οἶδα ὅτι οὐδὲν οἶδα",
-        Base.encode64(<<29, 10, 228, 45, 215, 110, 213, 118, 168, 14, 197, 198, 67, 72, 34, 221>>,
-          padding: false
-        ),
+        <<29, 10, 228, 45, 215, 110, 213, 118, 168, 14, 197, 198, 67, 72, 34, 221>>,
         100_000,
         "egGo+5eQIb9Ulp27Xyc7WkesMu/u4mksXknuExBUCnc"
       }

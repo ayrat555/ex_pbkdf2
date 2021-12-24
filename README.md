@@ -9,7 +9,7 @@ The package can be installed by adding `ex_pbkdf2` to your list of dependencies 
 ```elixir
 def deps do
   [
-    {:ex_pbkdf2, "~> 0.1"}
+    {:ex_pbkdf2, "~> 0.2"}
   ]
 end
 ```
@@ -47,7 +47,7 @@ ExPBKDF2.generate_salt()
 - `:format` - boolean flag. if it's true, the result will be returned in b64 format, otherwise, it will be returned as raw binary. The default value is `false`.
 
 ```elixir
-opts = %{salt: "c2FsdA", alg: "sha256", iterations: 4096, length: 32, format: true}
+opts = %{salt: "salt", alg: "sha256", iterations: 4096, length: 32, format: true}
 ExPBKDF2.pbkdf2("password", opts)
 \\ "xeR41ZKIyEGqUw22hFxMjZYok6ABzk4RpJY4c6qYE0o"
 ```
@@ -61,7 +61,7 @@ ExPBKDF2.pbkdf2("password", opts)
 - optional parameters map - it's almost the same as options for `pbkdf2`, the only exception is `format` flag is not needed.
 
 ```elixir
-opts = %{salt: "c2FsdA", alg: "sha256", iterations: 4096, length: 32}
+opts = %{salt: "salt", alg: "sha256", iterations: 4096, length: 32}
 hash = "xeR41ZKIyEGqUw22hFxMjZYok6ABzk4RpJY4c6qYE0o"
 password = "password"
 
