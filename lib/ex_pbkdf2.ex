@@ -1,9 +1,11 @@
 defmodule ExPBKDF2 do
-  @moduledoc false
+  @external_resource "README.md"
+  @moduledoc "README.md"
+             |> File.read!()
 
   alias ExPBKDF2.Impl
 
-  @spec generate_salt(bool() | nil) :: binary() | String.t() | no_return()
+  @spec generate_salt(boolean() | nil) :: binary() | String.t() | no_return()
   def generate_salt(format \\ false) do
     Impl.generate_salt(format)
   end
@@ -19,7 +21,7 @@ defmodule ExPBKDF2 do
     Impl.calculate_pbkdf2(password, salt, alg, iterations, length, format)
   end
 
-  @spec verify(String.t(), String.t(), map() | nil) :: bool() | no_return()
+  @spec verify(String.t(), String.t(), map() | nil) :: boolean() | no_return()
   def verify(hash, password, %{formatted: true}), do: Impl.verify(hash, password)
 
   def verify(hash, password, %{salt: salt, alg: alg, iterations: iterations, length: length}) do
