@@ -1,8 +1,12 @@
 # Changelog
 
+## 0.3.0
+
+* Use raw binary hash for verification
+
 ## 0.2.0
 
-* Use raw binary for salt
+* Use raw binary salt for verification
 
 ## 0.1.1
 

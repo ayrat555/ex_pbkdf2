@@ -26,6 +26,7 @@ defmodule ExPBKDF2 do
 
   def verify(hash, password, %{salt: raw_salt, alg: alg, iterations: iterations, length: length}) do
     salt = Base.encode64(raw_salt, padding: false)
+    hash = Base.encode64(hash, padding: false)
     formatted_hash = "$pbkdf2-#{alg}$i=#{iterations},l=#{length}$#{salt}$#{hash}"
 
     Impl.verify(formatted_hash, password)

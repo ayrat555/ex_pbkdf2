@@ -9,7 +9,7 @@ The package can be installed by adding `ex_pbkdf2` to your list of dependencies 
 ```elixir
 def deps do
   [
-    {:ex_pbkdf2, "~> 0.2"}
+    {:ex_pbkdf2, "~> 0.3"}
   ]
 end
 ```
@@ -62,7 +62,7 @@ ExPBKDF2.pbkdf2("password", opts)
 
 ```elixir
 opts = %{salt: "salt", alg: "sha256", iterations: 4096, length: 32}
-hash = "xeR41ZKIyEGqUw22hFxMjZYok6ABzk4RpJY4c6qYE0o"
+hash = Base.decode64!("xeR41ZKIyEGqUw22hFxMjZYok6ABzk4RpJY4c6qYE0o", padding: false)
 password = "password"
 
 ExPBKDF2.verify(hash, password, opts)

@@ -5,9 +5,10 @@ defmodule ExPbkdf2Test do
     test "calculates pbkdf2 and format to b64" do
       expected_formatted_result = "xeR41ZKIyEGqUw22hFxMjZYok6ABzk4RpJY4c6qYE0o"
 
-      opts = %{salt: "salt", alg: "sha256", iterations: 4096, length: 32, format: true}
+      opts = %{salt: "salt", alg: "sha256", iterations: 4096, length: 32}
 
-      assert expected_formatted_result == ExPBKDF2.pbkdf2("password", opts)
+      assert expected_formatted_result ==
+               "password" |> ExPBKDF2.pbkdf2(opts) |> Base.encode64(padding: false)
     end
 
     test "calculates pbkdf2 and returns raw binary" do
@@ -41,7 +42,7 @@ defmodule ExPbkdf2Test do
 
     test "formats and verifies" do
       opts = %{salt: "salt", alg: "sha256", iterations: 4096, length: 32}
-      hash = "xeR41ZKIyEGqUw22hFxMjZYok6ABzk4RpJY4c6qYE0o"
+      hash = Base.decode64!("xeR41ZKIyEGqUw22hFxMjZYok6ABzk4RpJY4c6qYE0o", padding: false)
       password = "password"
 
       assert ExPBKDF2.verify(hash, password, opts)
@@ -197,11 +198,11 @@ defmodule ExPbkdf2Test do
 
   defp check_vectors(vectors, alg, length \\ 64) do
     for {password, salt, iterations, hash} <- vectors do
-      opts = %{salt: salt, alg: alg, iterations: iterations, length: length, format: true}
+      opts = %{salt: salt, alg: alg, iterations: iterations, length: length}
 
       calc_hash = ExPBKDF2.pbkdf2(password, opts)
 
-      assert hash == calc_hash
+      assert hash == Base.encode64(calc_hash, padding: false)
       assert ExPBKDF2.verify(calc_hash, password, opts)
     end
   end
