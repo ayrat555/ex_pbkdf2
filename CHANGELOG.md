@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.3.1
+
+* Fix pbkdf2/2 typespec
+
 ## 0.3.0
 
 * Use raw binary hash for verification

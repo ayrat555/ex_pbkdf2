@@ -10,7 +10,7 @@ defmodule ExPBKDF2 do
     Impl.generate_salt(format)
   end
 
-  @spec pbkdf2(map(), map() | nil) :: binary() | String.t() | no_return()
+  @spec pbkdf2(String.t(), map() | nil) :: binary() | String.t() | no_return()
   def pbkdf2(password, opts \\ %{}) do
     salt = Map.get(opts, :salt, generate_salt())
     alg = Map.get(opts, :alg, "sha512")
