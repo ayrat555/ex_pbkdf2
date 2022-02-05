@@ -5,30 +5,31 @@ defmodule ExPBKDF2 do
 
   alias ExPBKDF2.Impl
 
-  @spec generate_salt(boolean() | nil) :: binary() | String.t() | no_return()
-  def generate_salt(format \\ false) do
-    Impl.generate_salt(format)
+  @spec generate_salt() :: binary() | no_return()
+  def generate_salt() do
+    Impl.generate_salt()
   end
 
-  @spec pbkdf2(String.t(), map() | nil) :: binary() | String.t() | no_return()
+  @spec pbkdf2(binary(), map() | nil) :: binary() | no_return()
   def pbkdf2(password, opts \\ %{}) do
     salt = Map.get(opts, :salt, generate_salt())
     alg = Map.get(opts, :alg, "sha512")
     iterations = Map.get(opts, :iterations, 4096)
     length = Map.get(opts, :length, 64)
-    format = Map.get(opts, :format, false)
 
-    Impl.calculate_pbkdf2(password, salt, alg, iterations, length, format)
+    Impl.calculate_pbkdf2(password, salt, alg, iterations, length)
   end
 
-  @spec verify(String.t(), String.t(), map() | nil) :: boolean() | no_return()
-  def verify(hash, password, %{formatted: true}), do: Impl.verify(hash, password)
+  @spec verify(binary(), binary(), map() | nil) :: boolean() | no_return()
+  def verify(hash, password, params \\ nil)
 
   def verify(hash, password, %{salt: raw_salt, alg: alg, iterations: iterations, length: length}) do
     salt = Base.encode64(raw_salt, padding: false)
     hash = Base.encode64(hash, padding: false)
     formatted_hash = "$pbkdf2-#{alg}$i=#{iterations},l=#{length}$#{salt}$#{hash}"
 
-    Impl.verify(formatted_hash, password)
+    verify(formatted_hash, password)
   end
+
+  def verify(formatted_hash, password, _), do: Impl.verify(formatted_hash, password)
 end
