@@ -1,6 +1,8 @@
 defmodule ExPbkdf2Test do
   use ExUnit.Case, async: true
 
+  doctest ExPBKDF2
+
   describe "pbkdf2/2" do
     test "calculates pbkdf2 and format to b64" do
       expected_formatted_result = "xeR41ZKIyEGqUw22hFxMjZYok6ABzk4RpJY4c6qYE0o"
