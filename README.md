@@ -9,7 +9,7 @@ The package can be installed by adding `ex_pbkdf2` to your list of dependencies 
 ```elixir
 def deps do
   [
-    {:ex_pbkdf2, "~> 0.3"}
+    {:ex_pbkdf2, "~> 0.4"}
   ]
 end
 ```
@@ -24,50 +24,7 @@ EXPBKDF2 provides three functions:
 - `pbkdf2/2` - hashes the provided password
 - `verify/3` - verifies the hash
 
-### generate_salt/1
-
-`generate_salt/1` accepts one parameter - format_flag. if it's true, the salt is encoded into b64 format, otherwise, a raw binary is returned.
-
-```elixir
-ExPBKDF2.generate_salt(true)
-\\ "SqeHk0Kbypmuj0lPVQsIpA"
-
-ExPBKDF2.generate_salt()
-\\ <<86, 203, 205, 255, 49, 164, 123, 49, 106, 130, 250, 222, 107, 90, 58, 9>>
-```
-
-### pbkdf2/2
-
-`pbkdf2` accepts two parameters - password and optional parameters map. The optional parameters include:
-
-- `:salt` - if it's not set, it will be generated
-- `:alg` - the hashing algorithm to be used. it can be `"sha512"` or `"sha256"`. Default value is `"sha512"`
-- `:iterations` - the number of iterations. The default value is 4096
-- `:length` - the length of the result. The default value is 64
-- `:format` - boolean flag. if it's true, the result will be returned in b64 format, otherwise, it will be returned as raw binary. The default value is `false`.
-
-```elixir
-opts = %{salt: "salt", alg: "sha256", iterations: 4096, length: 32, format: true}
-ExPBKDF2.pbkdf2("password", opts)
-\\ "xeR41ZKIyEGqUw22hFxMjZYok6ABzk4RpJY4c6qYE0o"
-```
-
-### verify/3
-
-`verify/3` accepts three parameters:
-
-- hash - hash generated with pbkdf2
-- password - used password
-- optional parameters map - it's almost the same as options for `pbkdf2`, the only exception is `format` flag is not needed.
-
-```elixir
-opts = %{salt: "salt", alg: "sha256", iterations: 4096, length: 32}
-hash = Base.decode64!("xeR41ZKIyEGqUw22hFxMjZYok6ABzk4RpJY4c6qYE0o", padding: false)
-password = "password"
-
-ExPBKDF2.verify(hash, password, opts)
-\\ true
-```
+The docs can be found at [https://hexdocs.pm/ex_pbkdf2](https://hexdocs.pm/ex_pbkdf2).
 
 ## Benchmarks
 
