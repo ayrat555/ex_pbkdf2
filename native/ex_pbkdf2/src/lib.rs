@@ -10,24 +10,16 @@ use rustler::types::binary::Binary;
 use rustler::types::binary::OwnedBinary;
 
 #[rustler::nif]
-fn generate_salt(format: bool) -> OwnedBinary {
+fn generate_salt() -> OwnedBinary {
     let result = SaltString::generate(&mut OsRng);
 
-    if format {
-        let mut erl_bin: OwnedBinary = OwnedBinary::new(22).unwrap();
-        erl_bin.as_mut_slice().copy_from_slice(&result.as_bytes());
+    let mut buffer = [0u8; 16];
+    result.b64_decode(&mut buffer).unwrap();
 
-        erl_bin
-    } else {
-        let mut buffer = [0u8; 16];
+    let mut erl_bin: OwnedBinary = OwnedBinary::new(16).unwrap();
+    erl_bin.as_mut_slice().copy_from_slice(&buffer);
 
-        result.b64_decode(&mut buffer).unwrap();
-
-        let mut erl_bin: OwnedBinary = OwnedBinary::new(16).unwrap();
-        erl_bin.as_mut_slice().copy_from_slice(&buffer);
-
-        erl_bin
-    }
+    erl_bin
 }
 
 #[rustler::nif]
@@ -37,7 +29,6 @@ fn calculate_pbkdf2(
     alg: String,
     iterations: u32,
     length: usize,
-    format: bool,
 ) -> OwnedBinary {
     let params = Params {
         rounds: iterations,
@@ -59,18 +50,10 @@ fn calculate_pbkdf2(
 
     let hash = result.hash.unwrap();
 
-    if format {
-        let str_hash = hash.to_string();
-        let mut erl_bin: OwnedBinary = OwnedBinary::new(str_hash.len()).unwrap();
-        erl_bin.as_mut_slice().copy_from_slice(&str_hash.as_bytes());
+    let mut erl_bin: OwnedBinary = OwnedBinary::new(length).unwrap();
+    erl_bin.as_mut_slice().copy_from_slice(&hash.as_bytes());
 
-        erl_bin
-    } else {
-        let mut erl_bin: OwnedBinary = OwnedBinary::new(length).unwrap();
-        erl_bin.as_mut_slice().copy_from_slice(&hash.as_bytes());
-
-        erl_bin
-    }
+    erl_bin
 }
 
 #[rustler::nif]

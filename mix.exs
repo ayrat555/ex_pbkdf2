@@ -6,7 +6,7 @@ defmodule ExPbkdf2.MixProject do
   def project do
     [
       app: :ex_pbkdf2,
-      version: "0.3.1",
+      version: "0.4.0",
       elixir: "~> 1.13",
       start_permanent: Mix.env() == :prod,
       deps: deps(),

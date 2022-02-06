@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.4.0
+
+* Remove `format` option - [#2](https://github.com/ayrat555/ex_pbkdf2/pull/2)
+
 ## 0.3.1
 
 * Fix pbkdf2/2 typespec

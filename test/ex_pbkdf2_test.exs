@@ -1,6 +1,8 @@
 defmodule ExPbkdf2Test do
   use ExUnit.Case, async: true
 
+  doctest ExPBKDF2
+
   describe "pbkdf2/2" do
     test "calculates pbkdf2 and format to b64" do
       expected_formatted_result = "xeR41ZKIyEGqUw22hFxMjZYok6ABzk4RpJY4c6qYE0o"
@@ -14,7 +16,7 @@ defmodule ExPbkdf2Test do
     test "calculates pbkdf2 and returns raw binary" do
       expected_formatted_result = "xeR41ZKIyEGqUw22hFxMjZYok6ABzk4RpJY4c6qYE0o"
 
-      opts = %{salt: "salt", alg: "sha256", iterations: 4096, length: 32, format: false}
+      opts = %{salt: "salt", alg: "sha256", iterations: 4096, length: 32}
 
       assert expected_formatted_result ==
                "password" |> ExPBKDF2.pbkdf2(opts) |> Base.encode64(padding: false)
@@ -30,14 +32,14 @@ defmodule ExPbkdf2Test do
       hash = "$pbkdf2-sha256$i=4096,l=32$c2FsdA$xeR41ZKIyEGqUw22hFxMjZYok6ABzk4RpJY4c6qYE0o"
       password = "password"
 
-      assert ExPBKDF2.verify(hash, password, %{formatted: true})
+      assert ExPBKDF2.verify(hash, password)
     end
 
     test "fails to verify" do
       hash = "$pbkdf2-sha256$i=4096,l=32$c2FsdA$xeR41ZKIyEGqUw22hFxMjZYok6ABzk4RpJY4c6qYE0o"
       password = "password1"
 
-      refute ExPBKDF2.verify(hash, password, %{formatted: true})
+      refute ExPBKDF2.verify(hash, password)
     end
 
     test "formats and verifies" do
@@ -50,16 +52,11 @@ defmodule ExPbkdf2Test do
   end
 
   describe "generate_salt/1" do
-    test "returns raw salt if format if false" do
-      assert binary = ExPBKDF2.generate_salt(false)
+    test "returns raw salt" do
+      assert binary = ExPBKDF2.generate_salt()
 
+      assert 16 = byte_size(binary)
       assert :error = Base.decode64(binary)
-    end
-
-    test "returns b64 encoded salt if format is true" do
-      assert binary = ExPBKDF2.generate_salt(true)
-
-      assert {:ok, _val} = Base.decode64(binary, padding: false)
     end
   end
 
@@ -69,9 +66,9 @@ defmodule ExPbkdf2Test do
     Benchee.run(
       %{
         "pbkdf2_seq" => fn ->
-          salt = ExPBKDF2.generate_salt(true)
+          salt = ExPBKDF2.generate_salt()
 
-          opts = %{salt: salt, alg: "sha512", iterations: 4096, length: 64, format: true}
+          opts = %{salt: salt, alg: "sha512", iterations: 4096, length: 64}
 
           ExPBKDF2.pbkdf2("password", opts)
         end
@@ -87,9 +84,9 @@ defmodule ExPbkdf2Test do
     Benchee.run(
       %{
         "pbkdf2_par" => fn ->
-          salt = ExPBKDF2.generate_salt(true)
+          salt = ExPBKDF2.generate_salt()
 
-          opts = %{salt: salt, alg: "sha512", iterations: 4096, length: 64, format: true}
+          opts = %{salt: salt, alg: "sha512", iterations: 4096, length: 64}
 
           ExPBKDF2.pbkdf2("password", opts)
         end
