@@ -24,3 +24,5 @@ ex_pbkdf2-*.tar
 
 # Temporary files, for example, from tests.
 /tmp/
+
+/priv/native/*
