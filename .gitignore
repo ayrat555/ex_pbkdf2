@@ -26,3 +26,4 @@ ex_pbkdf2-*.tar
 /tmp/
 
 /priv/native/*
+/native/ex_pbkdf2/target/*
