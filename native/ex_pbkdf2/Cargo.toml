@@ -10,6 +10,6 @@ path = "src/lib.rs"
 crate-type = ["cdylib"]
 
 [dependencies]
-rustler = "0.23"
+rustler = "0.24"
 pbkdf2 = "0.10"
 rand_core = { version = "0.6", features = ["std"] }
