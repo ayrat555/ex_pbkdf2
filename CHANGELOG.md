@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.5.1
+
+* Add cargo config - [#4](https://github.com/ayrat555/ex_pbkdf2/pull/4)
+
 ## 0.5.0
 
 * Update rustler to 0.24.0 - [#3](https://github.com/ayrat555/ex_pbkdf2/pull/3)
