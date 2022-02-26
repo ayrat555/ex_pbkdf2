@@ -32,8 +32,10 @@ defmodule ExPbkdf2.MixProject do
       },
       files: [
         "mix.exs",
+        "native/ex_pbkdf2/.cargo/config",
         "native/ex_pbkdf2/src",
         "native/ex_pbkdf2/Cargo.toml",
+        "native/ex_pbkdf2/Cargo.lock",
         "lib",
         "LICENSE",
         "README.md",
