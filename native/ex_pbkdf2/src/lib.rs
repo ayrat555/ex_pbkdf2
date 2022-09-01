@@ -6,9 +6,9 @@ use pbkdf2::Algorithm;
 use pbkdf2::Params;
 use pbkdf2::Pbkdf2;
 use rand_core::OsRng;
-use rustler::types::binary::Binary;
-use rustler::types::binary::NewBinary;
+use rustler::Binary;
 use rustler::Env;
+use rustler::NewBinary;
 
 #[rustler::nif]
 fn generate_salt<'a>(env: Env<'a>) -> Binary<'a> {

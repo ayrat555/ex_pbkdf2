@@ -6,7 +6,7 @@ defmodule ExPbkdf2.MixProject do
   def project do
     [
       app: :ex_pbkdf2,
-      version: "0.5.1",
+      version: "0.6.0",
       elixir: "~> 1.13",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
@@ -54,7 +54,7 @@ defmodule ExPbkdf2.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:rustler, "~> 0.24"},
+      {:rustler, "~> 0.25"},
       {:benchee, "~> 1.0", only: :test},
       {:dialyxir, "~> 1.0", only: [:dev, :test], runtime: false},
       {:credo, "~> 1.6", only: [:dev, :test], runtime: false},
