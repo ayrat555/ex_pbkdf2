@@ -15,7 +15,7 @@ defmodule ExPBKDF2 do
       16
   """
   @spec generate_salt() :: binary() | no_return()
-  def generate_salt() do
+  def generate_salt do
     Impl.generate_salt()
   end
 
