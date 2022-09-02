@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.7.0
+
+* Update ruslter to 0.26.0
+
 ## 0.6.0
 
 * Update rustler and pbkdf2 crates
