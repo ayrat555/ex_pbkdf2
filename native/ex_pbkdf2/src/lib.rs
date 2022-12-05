@@ -26,7 +26,7 @@ fn generate_salt<'a>(env: Env<'a>) -> Binary<'a> {
 #[rustler::nif]
 fn calculate_pbkdf2<'a>(
     env: Env<'a>,
-    password: String,
+    password: Binary,
     salt: Binary,
     alg: String,
     iterations: u32,
@@ -42,7 +42,7 @@ fn calculate_pbkdf2<'a>(
 
     let result = Pbkdf2
         .hash_password_customized(
-            password.as_bytes(),
+            password.as_slice(),
             Some(alg_var.ident()),
             None,
             params,
