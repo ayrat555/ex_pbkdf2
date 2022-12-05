@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.7.1 (2022-12-05)
+
+* Accept binaries along with strings ([#21](https://github.com/ayrat555/ex_pbkdf2/pull/21))
+
 ## 0.7.0
 
 * Update ruslter to 0.26.0
