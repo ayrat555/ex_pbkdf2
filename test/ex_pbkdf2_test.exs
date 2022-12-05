@@ -25,6 +25,26 @@ defmodule ExPbkdf2Test do
     test "generates salt if it's not provided" do
       assert ExPBKDF2.pbkdf2("password")
     end
+
+    test "accepts binaries" do
+      opts = %{
+        alg: "sha512",
+        iterations: 100_000,
+        length: 64,
+        salt: "TON default seed"
+      }
+
+      entropy =
+        <<207, 159, 229, 215, 122, 194, 60, 170, 203, 21, 77, 169, 64, 28, 145, 253, 89, 172, 192,
+          117, 44, 37, 103, 174, 189, 137, 144, 113, 57, 96, 67, 66, 99, 217, 176, 3, 24, 3, 139,
+          173, 117, 211, 99, 101, 115, 199, 191, 252, 127, 197, 27, 203, 220, 217, 26, 35, 202,
+          189, 143, 94, 138, 185, 127, 179>>
+
+      assert "d8912641d558016e8557aaac93216049a47934255e6419937c08e8a1687ae82cd0a05543c85296d76654aaf5801aa9d76f6cad96ae926174ab0b2306fe856611" ==
+               entropy
+               |> ExPBKDF2.pbkdf2(opts)
+               |> Base.encode16(case: :lower)
+    end
   end
 
   describe "verify/3" do
