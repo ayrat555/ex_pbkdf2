@@ -9,12 +9,10 @@ The package can be installed by adding `ex_pbkdf2` to your list of dependencies 
 ```elixir
 def deps do
   [
-    {:ex_pbkdf2, "~> 0.7"}
+    {:ex_pbkdf2, "~> 0.8"}
   ]
 end
 ```
-
-The minimum supported rust version is 1.51
 
 ## Usage
 

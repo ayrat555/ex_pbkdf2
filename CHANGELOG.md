@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.8.0 (2023-03-24)
+
+* Use `rustler_precompiled` ([#27](https://github.com/ayrat555/ex_pbkdf2/pull/27))
+
+Rust is not required anymore
+
 ## 0.7.1 (2022-12-05)
 
 * Accept binaries along with strings ([#21](https://github.com/ayrat555/ex_pbkdf2/pull/21))
