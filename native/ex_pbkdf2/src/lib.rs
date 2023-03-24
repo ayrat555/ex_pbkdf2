@@ -15,7 +15,7 @@ fn generate_salt<'a>(env: Env<'a>) -> Binary<'a> {
     let result = SaltString::generate(&mut OsRng);
 
     let mut buffer = [0u8; 16];
-    result.b64_decode(&mut buffer).unwrap();
+    result.decode_b64(&mut buffer).unwrap();
 
     let mut erl_bin = NewBinary::new(env, 16);
     erl_bin.as_mut_slice().copy_from_slice(&buffer);
@@ -38,7 +38,7 @@ fn calculate_pbkdf2<'a>(
     };
 
     let alg_var = parse_alg(alg);
-    let salt = SaltString::b64_encode(&salt.as_slice()).unwrap();
+    let salt = SaltString::encode_b64(&salt.as_slice()).unwrap();
 
     let result = Pbkdf2
         .hash_password_customized(
