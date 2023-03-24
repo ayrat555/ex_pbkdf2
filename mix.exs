@@ -2,12 +2,13 @@ defmodule ExPbkdf2.MixProject do
   use Mix.Project
 
   @source_url "https://github.com/ayrat555/ex_pbkdf2"
+  @version "0.8.0"
 
   def project do
     [
       app: :ex_pbkdf2,
-      version: "0.7.1",
-      elixir: "~> 1.13",
+      version: @version,
+      elixir: "~> 1.10",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
       description: description(),
@@ -39,7 +40,8 @@ defmodule ExPbkdf2.MixProject do
         "lib",
         "LICENSE",
         "README.md",
-        "CHANGELOG.md"
+        "CHANGELOG.md",
+        "checksum-*.exs"
       ]
     ]
   end
@@ -54,7 +56,8 @@ defmodule ExPbkdf2.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:rustler, "~> 0.27"},
+      {:rustler, ">= 0.0.0", optional: true},
+      {:rustler_precompiled, "~> 0.6"},
       {:benchee, "~> 1.0", only: :test},
       {:dialyxir, "~> 1.0", only: [:dev, :test], runtime: false},
       {:credo, "~> 1.6", only: [:dev, :test], runtime: false},
