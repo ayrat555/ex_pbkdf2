@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.8.1
+
+* Update rustler to 0.29 (https://github.com/ayrat555/ex_pbkdf2/pull/30)
+
 ## 0.8.0 (2023-03-24)
 
 * Use `rustler_precompiled` ([#27](https://github.com/ayrat555/ex_pbkdf2/pull/27))
