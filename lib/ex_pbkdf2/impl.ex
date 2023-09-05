@@ -7,7 +7,7 @@ defmodule ExPBKDF2.Impl do
     otp_app: :ex_pbkdf2,
     crate: :ex_pbkdf2,
     base_url: "https://github.com/ayrat555/ex_pbkdf2/releases/download/v#{version}",
-    force_build: System.get_env("EX_PBKDF2_BUILD") in ["1", "true"],
+    force_build: System.get_env("RUSTLER_BUILD") in ["1", "true"],
     version: version
 
   def generate_salt, do: :erlang.nif_error(:nif_not_loaded)
