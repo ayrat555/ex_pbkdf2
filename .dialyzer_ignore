@@ -1,2 +1,3 @@
 lib/ex_pbkdf2/impl.ex:1: Unknown function 'Elixir.Rustler':construct_load_data/2
 lib/ex_pbkdf2/impl.ex:0: Unknown function 'Elixir.Rustler':construct_load_data/2
+:0: Unknown function 'Elixir.Rustler':construct_load_data/2
