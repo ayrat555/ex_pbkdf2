@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.8.2
+
+* Update rustler to 0.32 (https://github.com/ayrat555/ex_pbkdf2/pull/41)
+
 ## 0.8.1
 
 * Update rustler to 0.29 (https://github.com/ayrat555/ex_pbkdf2/pull/30)
