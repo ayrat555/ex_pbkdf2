@@ -2,7 +2,7 @@ defmodule ExPbkdf2.MixProject do
   use Mix.Project
 
   @source_url "https://github.com/ayrat555/ex_pbkdf2"
-  @version "0.8.1"
+  @version "0.8.2"
 
   def project do
     [
@@ -60,7 +60,7 @@ defmodule ExPbkdf2.MixProject do
   defp deps do
     [
       {:rustler, ">= 0.0.0", optional: true},
-      {:rustler_precompiled, "~> 0.6"},
+      {:rustler_precompiled, "~> 0.7"},
       {:benchee, "~> 1.0", only: :test},
       {:dialyxir, "~> 1.4", only: [:dev, :test], runtime: false},
       {:credo, "~> 1.7", only: [:dev, :test], runtime: false},
