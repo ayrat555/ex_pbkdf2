@@ -75,7 +75,4 @@ fn parse_alg(alg: String) -> Algorithm {
     }
 }
 
-rustler::init!(
-    "Elixir.ExPBKDF2.Impl",
-    [generate_salt, calculate_pbkdf2, verify]
-);
+rustler::init!("Elixir.ExPBKDF2.Impl");
