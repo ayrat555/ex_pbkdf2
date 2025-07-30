@@ -2,7 +2,7 @@ defmodule ExPbkdf2.MixProject do
   use Mix.Project
 
   @source_url "https://github.com/ayrat555/ex_pbkdf2"
-  @version "0.8.4"
+  @version "0.8.5"
 
   def project do
     [

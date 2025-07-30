@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.8.5
+
+* use ubuntu 22.04 as builder insead of 24.04 to support older OSes - [#46](https://github.com/ayrat555/ex_pbkdf2/pull/46)
+
 ## 0.8.4
 
 * Update rustler to 0.36 - [#43](https://github.com/ayrat555/ex_pbkdf2/pull/43)
